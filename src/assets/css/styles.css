@@ -1,0 +1,70 @@
+/* 样式 */
+.label {
+    display: inline;
+    padding: 3px;
+    background-color: #ffbb00;
+    /* 浅色背景 */
+    border-radius: 4px;
+    /* 圆角 */
+    color: #ffffff;
+    /* 文字颜色 */
+    font-size: 11px;
+    align-items: center;
+    justify-content: center;
+}
+
+.label2 {
+    display: inline;
+    padding: 3px;
+    background-color: #1c8bf0;
+    /* 浅色背景 */
+    border-radius: 4px;
+    /* 圆角 */
+    color: #ffffff;
+    /* 文字颜色 */
+    font-size: 11px;
+    align-items: center;
+    justify-content: center;
+}
+
+.label_grey {
+    display: inline;
+    padding: 3px;
+    background-color: #dfdfdf;
+    /* 浅色背景 */
+    border-radius: 4px;
+    /* 圆角 */
+    color: #000000;
+    /* 文字颜色 */
+    font-size: 11px;
+    align-items: center;
+    justify-content: center;
+}
+
+.label_green {
+    display: inline;
+    padding: 3px;
+    background-color: #cafacea9;
+    /* 浅色背景 */
+    border-radius: 4px;
+    /* 圆角 */
+    color: #000000;
+    /* 文字颜色 */
+    font-size: 11px;
+    align-items: center;
+    justify-content: center;
+}
+
+.label_red {
+    display: inline;
+    padding: 3px;
+    background-color: #fa9a9aa9;
+    /* 浅色背景 */
+    border-radius: 4px;
+    /* 圆角 */
+    color: #000000;
+    /* 文字颜色 */
+    font-size: 11px;
+    align-items: center;
+    justify-content: center;
+}
