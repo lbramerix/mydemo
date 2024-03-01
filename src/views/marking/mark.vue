@@ -86,6 +86,11 @@
                     <my-keyboard></my-keyboard>
                 </div>
             </Draggable>
+            <Draggable>
+                <div style="position: absolute; bottom: 0; left: 0; z-index: 999; background-color: #4E91FF;width: 100px;">
+                    acdjl
+                </div>
+            </Draggable>
 
 
         </div>
