@@ -76,7 +76,7 @@
 
         </div>
         <div
-            style="background-color: #f2f3f5;height: 100%; min-height: calc(100vh - 100px);margin: 0;padding: 0;overflow: hidden;display: flex;flex-direction: row;">
+            style="background-color: #f2f3f5;height: 100%; min-height: calc(100vh - 100px);margin: 0;padding: 0;overflow: hidden;display: flex;flex-direction: row;position: relative;">
             <div style="display: flex; align-items: flex-start; justify-content: flex-start;margin-top: 0px;">
                 <img src="../../assets/img/paper.jpg"
                     :style="{ marginLeft: '50px', transform: 'scale(' + scaleRatio / 100 + ')', transformOrigin: 'top left' }">
@@ -86,14 +86,21 @@
                     <my-keyboard></my-keyboard>
                 </div>
             </Draggable>
-            <Draggable>
-                <div style="position: absolute; bottom: 0; left: 0; z-index: 999; background-color: #4E91FF;width: 100px;">
-                    acdjl
-                </div>
-            </Draggable>
-
-
         </div>
+        <div class="z-9999 bottom-0 left-0 absolute;" style="background-color: #f2f3f5;">
+                <el-affix position="bottom" :offset="0">
+                    <el-button v-if="!isEditOpen" @click="toggleSidebar">编辑栏</el-button>
+                    <div :class="{ 'sidebar-open': isOpen }" class="sidebar">
+
+                        <el-card style="width: 480px" shadow="always">
+                            <span>T</span>
+                            <el-divider direction="vertical" />
+                            <span>清空</span>
+                            <el-button @click="closeSidebar">收起</el-button>
+                        </el-card>
+                    </div>
+                </el-affix>
+            </div>
     </div>
 </template>
 
@@ -110,7 +117,9 @@ export default {
             isFlag: false,
             flagText: '标记试题',
             scaleRatio: 100,
-            keyboardPosition: { x: 0, y: 0 }
+            keyboardPosition: { x: 0, y: 0 },
+            isOpen: false,
+            isEditOpen: false
         };
     },
     created() {
@@ -136,6 +145,16 @@ export default {
         },
         onMove(event) {
             console.log('Keyboard moved to:', event.position);
+        },
+        toggleSidebar() {
+            this.isOpen = !this.isOpen;
+            this.isEditOpen = true;
+        },
+        closeSidebar() {
+            if (this.isOpen) {
+                this.isOpen = false;
+                this.isEditOpen = false;
+            }
         }
     }
 }
@@ -196,5 +215,25 @@ export default {
 
 .box-card {
     width: 480px;
+}
+
+.sidebar {
+    width: 0;
+    overflow: hidden;
+    /* transition: width 0.3s; */
+    /* 添加过渡效果 */
+}
+
+.sidebar-open {
+    width: 200px;
+    /* 设置侧边栏的宽度 */
+}
+
+.demo-radius .radius {
+    height: 40px;
+    width: 70%;
+    border: 1px solid var(--el-border-color);
+    border-radius: 0;
+    margin-top: 20px;
 }
 </style>
