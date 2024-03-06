@@ -30,11 +30,12 @@
                     <template v-if="isFlag">
                         <Flag />
                     </template>
+
                     <template v-else>
                         <CollectionTag />
                     </template>
                 </el-icon>
-                <span style="margin-left: 5px; line-height: 24px;">{{ flagText }}</span>
+                <span style="margin-left: 5px; line-height: 24px;">{{ flagText.name }}</span>
             </div>
 
             <div style="margin-left: 20px; display: flex; align-items: center;">
@@ -62,6 +63,7 @@
                             <arrow-down />
                         </el-icon>
                     </span>
+
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-dropdown-item @click="scaleRatio = 100">100%</el-dropdown-item>
@@ -83,83 +85,70 @@
             </div>
             <Draggable>
                 <div style="margin-left: 20px;margin-top: 10px;">
-                    <my-keyboard></my-keyboard>
+                    <Mykeyboard></Mykeyboard>
                 </div>
             </Draggable>
         </div>
         <div class="z-9999 bottom-0 left-0 absolute;" style="background-color: #f2f3f5;">
-                <el-affix position="bottom" :offset="0">
-                    <el-button v-if="!isEditOpen" @click="toggleSidebar">编辑栏</el-button>
-                    <div :class="{ 'sidebar-open': isOpen }" class="sidebar">
+            <el-affix position="bottom" :offset="0">
+                <el-button v-if="!isEditOpen" @click="toggleSidebar">编辑栏</el-button>
+                <div :class="{ 'sidebar-open': isOpen }" class="sidebar">
 
-                        <el-card style="width: 480px" shadow="always">
-                            <span>T</span>
-                            <el-divider direction="vertical" />
-                            <span>清空</span>
-                            <el-button @click="closeSidebar">收起</el-button>
-                        </el-card>
-                    </div>
-                </el-affix>
-            </div>
+                    <el-card style="width: 480px" shadow="always">
+                        <span>T</span>
+                        <el-divider direction="vertical" />
+                        <span>清空</span>
+                        <el-button @click="closeSidebar">收起</el-button>
+                    </el-card>
+                </div>
+            </el-affix>
+        </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { computed, ref, watch, reactive } from 'vue';
 import Mykeyboard from '@/views/marking/keyboard.vue';
-export default {
-    components: {
-        'my-keyboard': Mykeyboard,
-    },
-    data() {
-        return {
-            markName: '',
-            teacher: '11班老师',
-            isFlag: false,
-            flagText: '标记试题',
-            scaleRatio: 100,
-            keyboardPosition: { x: 0, y: 0 },
-            isOpen: false,
-            isEditOpen: false
-        };
-    },
-    created() {
-        this.markName = this.$route.query.name;
-    },
-    methods: {
-        goBack() {
-            this.$router.go(-1);
-        },
-        changeIcon() {
-            this.isFlag = !this.isFlag; // 切换Flag图标状态
-            this.flagText = this.isFlag ? '已标记试题' : '标记试题'; // 根据状态切换文字内容
-        },
-        enlargeImage() {
-            if (this.scaleRatio < 200) {
-                this.scaleRatio += 10;
-            }
-        },
-        reduceImage() {
-            if (this.scaleRatio > 50) {
-                this.scaleRatio -= 10;
-            }
-        },
-        onMove(event) {
-            console.log('Keyboard moved to:', event.position);
-        },
-        toggleSidebar() {
-            this.isOpen = !this.isOpen;
-            this.isEditOpen = true;
-        },
-        closeSidebar() {
-            if (this.isOpen) {
-                this.isOpen = false;
-                this.isEditOpen = false;
-            }
-        }
+import { useDraggable } from '@vueuse/core'
+import {useRoute} from 'vue-router';
+const route = useRoute()
+let markName = route.query.name;
+let teacher = '11班老师';
+let isFlag = ref(false);
+
+let flagText = reactive({ name: '标记试题' })
+let scaleRatio = ref(100);
+let isOpen = ref(false);
+let isEditOpen = ref(false);
+
+
+function goBack() {
+    route.go(-1);
+}
+function changeIcon() {
+    isFlag.value = !isFlag.value; // 切换Flag图标状态
+    flagText.name = isFlag.value ? '已标记试题' : '标记试题'; // 根据状态切换文字内容
+}
+function enlargeImage() {
+    if (scaleRatio.value < 200) {
+        scaleRatio.value += 10;
     }
 }
-
-
+function reduceImage() {
+    if (scaleRatio.value > 50) {
+        scaleRatio.value -= 10;
+    }
+}
+function toggleSidebar() {
+    isOpen.value = !isOpen.value;
+    isEditOpen.value = true;
+}
+function closeSidebar() {
+    if (isOpen.value) {
+        isOpen.value = false;
+        isEditOpen.value = false;
+    }
+}
 </script>
 
 

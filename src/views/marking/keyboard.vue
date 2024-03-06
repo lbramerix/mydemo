@@ -5,101 +5,111 @@
 
             </div>
         </template>
-        <div class="wrapper" @click.stop='_handleKeyPress'>
+        <div class="wrapper">
             <el-input placeholder="请给分" @click="isInputChoose = true" v-model="number" class="box kput"
-                v-bind:value="score"></el-input>
-            <el-button class="box k7" data-num='7'>7</el-button>
-            <el-button class="box k8" style="margin-left: 0px;" data-num='8'>8</el-button>
-            <el-button class="box k9" style="margin-left: 0px;" data-num='9'>9</el-button>
-            <el-button class="box k4" style="margin-left: 0px;" data-num='4'>4</el-button>
-            <el-button class="box k5" style="margin-left: 0px;" data-num='5'>5</el-button>
-            <el-button class="box k6" style="margin-left: 0px;" data-num='6'>6</el-button>
-            <el-button class="box k1" style="margin-left: 0px;" data-num='1'>1</el-button>
-            <el-button class="box k2" style="margin-left: 0px;" data-num='2'>2</el-button>
-            <el-button class="box k3" style="margin-left: 0px;" data-num='3'>3</el-button>
-            <el-button class="box k0" style="margin-left: 0px;" data-num='0'>0</el-button>
-            <el-button class="box kb" style="margin-left: 0px;" data-num='.'>.</el-button>
-            <el-button class="box kdelete" style="margin-left: 0px;" data-num='D'>删除</el-button>
+                :value="score.name"></el-input>
+
+            <div class="numberContainer ">
+                <el-button v-for="num in displayedNumbers" :key="num" class="box" :data-id="num">{{
+                num }}</el-button>
+            </div>
+            <el-button class="box k0" data-id='0'>0</el-button>
+            <el-button class="box kb" style="margin-left: 0px;" data-id='.'>.</el-button>
+            <el-button class="box kdelete" style="margin-left: 0px;" data-id='D'>删除</el-button>
             <el-button class="kfill" type="success" plain style="height: auto;margin-left: 0px;">满分</el-button>
             <el-button class="ksubmit" type="primary" style="width: auto;margin-left: 0px;height: auto;"
-                data-num='S'>给分</el-button>
+                data-id='S'>给分</el-button>
         </div>
     </el-card>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            score: ''
+<script setup>
+import { computed, ref, watch, reactive } from 'vue';
+import { useActiveElement  } from '@vueuse/core'
+
+const activeElement = useActiveElement()
+let score = reactive({ name: '' })
+const displayedNumbers = ref([9, 8, 7, 6, 5, 4, 3, 2, 1]);
+
+watch(activeElement, (el) => {
+    switch (String(el.dataset.id)) {
+        case '.':
+            _handleDecimalPoint();
+            el.blur();
+            break;
+        case 'D':
+            _handleDeleteKey();
+            el.blur();
+            break;
+        case 'S':
+            _handleConfirmKey();
+            el.blur();
+            break;
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            _handleNumberKey(el.dataset.id);
+            el.blur();
+            break;
+        default:
+            break;
+    }
+})
+function _handleDecimalPoint() {
+    if (score.name.indexOf('.') > -1) return false;
+    if (!score.name.length)
+        score.name = '0.';
+    else
+        score.name = score.name + '.';
+
+}
+function _handleDeleteKey() {
+    let S = score.name;
+    if (!S.length) return false;
+    score.name = S.substring(0, S.length - 1);
+
+}
+function _handleClearKey() {
+    score.name = '';
+}
+function _handleNumberKey(num) {
+    let S = score.name.toString();
+    if (S.indexOf('.') > -1 && S.substring(S.indexOf('.') + 1).length < 2)
+        score.name = S + num;
+    if (!(S.indexOf('.') > -1)) {
+        if (num == 0 && S.length == 0)
+            score.name = '0.';
+
+        else {
+            if (S.length && Number(S.charAt(0)) === 0) return;
+            score.name = S + num;
         }
-    },
-    methods: {
-        _handleKeyPress(e) {
-            let num = e.target.dataset.num;
-            switch (String(num)) {
-                case '.':
-                    this._handleDecimalPoint();
-                    break;
-                case 'D':
-                    this._handleDeleteKey();
-                    break;
-                case 'S':
-                    this._handleConfirmKey();
-                    break;
-                default:
-                    this._handleNumberKey(num);
-                    break;
-            }
-        },
-        _handleDecimalPoint() {
-            if (this.score.indexOf('.') > -1) return false;
-            if (!this.score.length)
-                this.score = '0.';
-            else
-                this.score = this.score + '.';
 
-        },
-        _handleDeleteKey() {
-            let S = this.score;
-            if (!S.length) return false;
-            this.score = S.substring(0, S.length - 1);
-
-        },
-        _handleClearKey() {
-            this.score = '';
-        },
-        _handleNumberKey(num) {
-            let S = this.score;
-            console.log(S)
-            if (S.indexOf('.') > -1 && S.substring(S.indexOf('.') + 1).length < 2)
-                this.score = S + num;
-            if (!(S.indexOf('.') > -1)) {
-                if (num == 0 && S.length == 0)
-                    this.score = '0.';
-
-                else {
-                    if (S.length && Number(S.charAt(0)) === 0) return;
-                    this.score = S + num;
-                }
-
-            }
-
-        },
-        _handleConfirmKey() {
-            let S = this.score;
-            if (!S.length) {
-                alert('您目前未输入!')
-                return false;
-            }
-            if (S.indexOf('.') > -1 && S.indexOf('.') == (S.length - 1))
-                S = Number(S.substring(0, S.length - 1)).toFixed(2);
-            S = Number(S).toFixed(2);
-            this.$emit('confirmEvent', S)
-        }
+    }
+    const inputElement = document.querySelector('.kput input');
+    if (inputElement) {
+        inputElement.blur();
     }
 }
+function _handleConfirmKey() {
+    let S = score.name;
+    if (!S.length) {
+        alert('您目前未输入!')
+        return false;
+    }
+    if (S.indexOf('.') > -1 && S.indexOf('.') == (S.length - 1))
+        S = Number(S.substring(0, S.length - 1)).toFixed(2);
+    S = Number(S).toFixed(2);
+}
 </script>
+
 <style>
 .grid-container {
     display: grid;
@@ -169,49 +179,18 @@ export default {
     grid-row: 1 / 2;
 }
 
-.k7 {
-    grid-column: 1 / 2;
-    grid-row: 3 / 4;
+.el-button+.el-button {
+    margin-left: 0px;
 }
 
-.k8 {
-    grid-column: 3 / 4;
-    grid-row: 3 / 4;
-}
-
-.k9 {
-    grid-column: 5 / 6;
-    grid-row: 3 / 4;
-}
-
-.k4 {
-    grid-column: 1 / 2;
-    grid-row: 5/ 6;
-}
-
-.k5 {
-    grid-column: 3 / 4;
-    grid-row: 5/ 6;
-}
-
-.k6 {
-    grid-column: 5 / 6;
-    grid-row: 5/ 6;
-}
-
-.k1 {
-    grid-column: 1 / 2;
-    grid-row: 7/ 8;
-}
-
-.k2 {
-    grid-column: 3 / 4;
-    grid-row: 7/ 8;
-}
-
-.k3 {
-    grid-column: 5 / 6;
-    grid-row: 7/ 8;
+.numberContainer {
+    display: grid;
+    grid-column: 1 / 6;
+    grid-row: 3/ 8;
+    grid-row-gap: 10px;
+    grid-column-gap: 5px;
+    grid-template-columns: 80px 80px 80px;
+    grid-template-rows: 40px 40px 40px;
 }
 
 .k0 {
