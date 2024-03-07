@@ -14,6 +14,28 @@
 			<div class="rightmiddle">
 				<img src="~@/assets/img/webimg.png" alt="">
 			</div>
+			<div class="dialog-container z-999">
+				<el-dialog title="" v-model="dialogFormVisible" :close-on-click-modal="false" class="dialog" width="20%"
+					:top="'18%'" center :lock-scroll="false">
+					<div
+						style="text-align: center; display: flex; align-items: center; justify-content: center; margin-top: 20px; margin-bottom: 20px;font-size: 20px;">
+						<span style="font-weight: bold;">学业大数据采集与分析平台</span>
+					</div>
+					<el-form v-model="userData" style="text-align: center;margin-left: 20px;margin-right: 20px;">
+						<el-form-item label="账号">
+							<el-input v-model="userData.username" placeholder="请输入账号"></el-input>
+						</el-form-item>
+						<el-form-item label="密码">
+							<el-input v-model="userData.password" type="password" placeholder="请输入密码"
+								show-password></el-input>
+						</el-form-item>
+					</el-form>
+					<div class="dialog-footer" style="text-align: center;">
+						<el-button @click="dialogFormVisible = false;">取 消</el-button>
+						<el-button type="primary" @click="onLogin" style="margin-left: 12px;">登 录</el-button>
+					</div>
+				</el-dialog>
+			</div>
 		</div>
 
 		<div class="bottom">
@@ -23,7 +45,8 @@
 					<p
 						style="font-size: 28px;text-align: center;color: #000000;font-family: start;font-weight: bold;margin-top: 40px;">
 						云阅卷</p>
-					<p style="font-size: 16px;line-height: 22px;text-align: center;color: #999;margin-top: 10px;">学业大数据采集工具
+					<p style="font-size: 16px;line-height: 22px;text-align: center;color: #999;margin-top: 10px;">
+						学业大数据采集工具
 					</p>
 				</div>
 			</div>
@@ -33,7 +56,8 @@
 					<p
 						style="font-size: 28px;text-align: center;color: #000000;font-family: start;font-weight: bold;margin-top: 40px;">
 						精准作业</p>
-					<p style="font-size: 16px;line-height: 22px;text-align: center;color: #999;margin-top: 10px;">作业布置监管平台
+					<p style="font-size: 16px;line-height: 22px;text-align: center;color: #999;margin-top: 10px;">
+						作业布置监管平台
 					</p>
 
 				</div>
@@ -44,58 +68,45 @@
 					<p
 						style="font-size: 28px;text-align: center;color: #141414;font-family: start;font-weight: bold;margin-top: 40px;">
 						质量平台</p>
-					<p style="font-size: 16px;line-height: 22px;text-align: center;color: #999;margin-top: 10px;">学业数据分析管理平台
+					<p style="font-size: 16px;line-height: 22px;text-align: center;color: #999;margin-top: 10px;">
+						学业数据分析管理平台
 					</p>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="dialog-container">
-		<el-dialog title="" v-model="dialogFormVisible" :close-on-click-modal="false" class="dialog" width="20%"
-			:top="'18%'" center :lock-scroll="false">
-			<div
-				style="text-align: center; display: flex; align-items: center; justify-content: center; margin-top: 20px; margin-bottom: 20px;font-size: 20px;">
-				<span style="font-weight: bold;">学业大数据采集与分析平台</span>
-			</div>
-			<el-form ref="form" style="text-align: center;margin-left: 20px;margin-right: 20px;">
-				<el-form-item label="账号">
-					<el-input v-model="form.name" placeholder="请输入账号"></el-input>
-				</el-form-item>
-				<el-form-item label="密码">
-					<el-input v-model="form.password" type="password" placeholder="请输入密码" show-password></el-input>
-				</el-form-item>
-			</el-form>
-			<div class="dialog-footer" style="text-align: center;">
-				<el-button @click="dialogFormVisible = false;">取 消</el-button>
-				<el-button type="primary" @click="submitForm('form')">登 录</el-button>
-			</div>
-		</el-dialog>
+
 	</div>
 </template>
 
-<script>
-export default {
-	data() {
-		return {
-			logining: false,
-			dialogFormVisible: false,
-			form: {
-				name: '',
-				password: ''
-			}
+<script setup>
+import { computed, ref, watch, reactive } from 'vue';
+let logining = ref(false);
+let dialogFormVisible = ref(false);
+import useUserStore from "../store/user"
 
-		};
-	},
-	methods: {
-		submitForm(form) {
-			// 测试通道，不为空直接登录
-			if (this.form.name && this.form.password) { this.$router.push({ path: '/index' }) }
-			else { alert('请输入账号和密码') }
-		}
-	},
+const userData = reactive({
+	username: '',
+	password: '',
+})
+
+// 实例化 store
+const userStore = useUserStore()
+
+const onLogin = async () => {
+	// 使用 actions，当作函数一样直接调用
+	// login action 定义为了 async 函数，所以它返回一个 Promise
+	await userStore.login(userData)
+	userData.username = ''
+	userData.password = ''
 }
-
-
+const onLogout = () => {
+  userStore.logout()
+}
+function submitForm(form) {
+	// 测试通道，不为空直接登录
+	if (form.username && form.password) {  }
+	else { alert('请输入账号和密码') }
+}
 </script>
 
 <style scoped>
@@ -183,6 +194,9 @@ export default {
 .middlebottom,
 .rightbottom {
 	flex: 1;
+	justify-content: center;
+	align-items: center;
+	display: flex;
 	/* 让三个子元素平分父容器的宽度 */
 }
 
@@ -191,6 +205,8 @@ export default {
 	width: 210px;
 	height: 300px;
 	margin-top: 30px;
+	justify-content: center;
+	align-items: center;
 }
 
 .test-shadow:hover {
@@ -212,4 +228,5 @@ export default {
 .dialog {
 	width: 200px;
 	text-align: center;
-}</style>
+}
+</style>

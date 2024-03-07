@@ -65,7 +65,7 @@
             <span style="display: inline-block;margin-left: 10px;font-size: 16px;font-weight: 700;">长春市普通高中2023级高一质量监测</span>
           </div>
         </template>
-        <el-collapse v-model="activeNames2" style="margin-left: 30px;margin-right: 30px;">
+        <el-collapse v-model="activeNames4" style="margin-left: 30px;margin-right: 30px;">
           <el-collapse-item name="1">
             <template v-slot:title>
               <div>
@@ -158,6 +158,7 @@ export default {
       activeNames: ['1'],
       activeNames2: ['1', '2','3'],
       activeNames3: ['1'],
+      activeNames4: ['1'],
       num1: 10,
       num2: 20,
       num3: 900,

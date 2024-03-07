@@ -88,6 +88,15 @@
                     <Mykeyboard></Mykeyboard>
                 </div>
             </Draggable>
+            
+            <div ref="el" p="x-4 y-2" border="~ gray-800/30 rounded" shadow="~ hover:lg"
+                class="fixed bg-$vp-c-bg select-none cursor-move z-31" style="touch-action:none;" :style="style">
+                👋 Drag me!
+                <div class="text-sm opacity-50">
+                    I am at {{ Math.round(x) }}, {{ Math.round(y) }}
+                </div>
+            </div>
+
         </div>
         <div class="z-9999 bottom-0 left-0 absolute;" style="background-color: #f2f3f5;">
             <el-affix position="bottom" :offset="0">
@@ -110,7 +119,8 @@
 import { computed, ref, watch, reactive } from 'vue';
 import Mykeyboard from '@/views/marking/keyboard.vue';
 import { useDraggable } from '@vueuse/core'
-import {useRoute} from 'vue-router';
+import { isClient } from '@vueuse/shared'
+import { useRoute } from 'vue-router';
 const route = useRoute()
 let markName = route.query.name;
 let teacher = '11班老师';
@@ -121,6 +131,17 @@ let scaleRatio = ref(100);
 let isOpen = ref(false);
 let isEditOpen = ref(false);
 
+const el = ref<HTMLElement | null>(null)
+const handle = ref<HTMLElement | null>(null)
+
+const innerWidth = isClient ? window.innerWidth : 200
+
+const disabled = ref(false)
+const { x, y, style } = useDraggable(el, {
+    initialValue: { x: innerWidth / 4.2, y: 80 },
+    preventDefault: true,
+    disabled,
+})
 
 function goBack() {
     route.go(-1);
