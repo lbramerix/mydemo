@@ -12,8 +12,8 @@
     <div class="el-menu-item" :class="{ 'selected': selectedMenu === '/yuejuan/questionbank' }"
       @click="handleMenuClick('/yuejuan/questionbank')">题库组卷</div>
     <div style="margin-left: auto;margin-right: 300px;flex-direction: column; display: flex;justify-content: flex-end;">
-      <span style="font-weight: bold;align-self: flex-end;">
-        11班班主任
+      <span style="font-weight: bold;align-self: flex-end;" @click="personal()">
+        {{teacherName}}
       </span>
       <el-dropdown :hide-on-click="false" style="margin-top: 5px;" @command="handleCommand">
         <span class="el-dropdown-link" style="font-size: 12px;color: gray;">
@@ -34,18 +34,22 @@
   </nav>
   <div class="highlight"></div> <!-- 在导航栏下面添加一条蓝色线 -->
 </template>
-  
+
 <script>
 import router from '@/router/index'; // 引入 Vue Router 实例
 import { ArrowDown } from '@element-plus/icons-vue'
+import store from '../store/index.js';
+
 export default {
   data() {
     return {
+      teacherName:'',
       selectedMenu: '',
       selectedText: '长春市第一高级中学'
     };
   },
   created() {
+    this.teacherName = store.state.name;
     switch (router.currentRoute.value.path) {
       case '/yuejuan/teacher':
         this.selectedMenu = '/yuejuan/teacher';
@@ -68,17 +72,12 @@ export default {
         break;
 
     }
-    // if (router.currentRoute.value.path === '/yuejuan/teacher') {
-
-    // } else {
-    //   this.selectedMenu = '/yuejuan/exam';
-    //   router.push({ path: '/yuejuan/exam' });
-    // }
   },
   methods: {
     handleMenuClick(menu) {
       this.selectedMenu = menu; // 更新选中的菜单项
       router.push({ path: menu }); // 执行路由跳转
+
     },
     handleCommand(command) {
       console.log('Selected command:', command); // 添加这行调试输出语句
@@ -89,6 +88,9 @@ export default {
       } else if (command === '3') {
         this.selectedText = '鹿岭3高';
       }
+    },
+    personal(){
+      router.push({ path: '/personal' }); // 执行路由跳转
     }
   }
 };
@@ -152,4 +154,3 @@ nav .el-menu-item:hover {
   align-items: center;
 }
 </style>
-  

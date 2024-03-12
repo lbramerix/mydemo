@@ -1,30 +1,33 @@
-import { defineStore } from "pinia";
-const useCounterStore = defineStore("counter", {
-    // 数据 data
-    state: () => {
-        return {
-            count: 100,
-        };
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+
+export default new Vuex.Store({
+    state: {
+        id: localStorage.getItem('id') , // 从localStorage获取ID
+        username: localStorage.getItem('username') , // 从localStorage获取用户名
+        name: localStorage.getItem('name') , // 从localStorage获取真实姓名
+
     },
-    //   计算 cpmputed
-    getters: {},
-    //   方法 methods
-    actions: {},
-});
+    getters: {
+        id: (state) => state.id,
+        username: (state) => state.username,
+        name: (state) => state.name,
+    },
+    mutations: {
+        setId: (state, id) => {
+            state.id = id;
+            localStorage.setItem('id', id);
+        },
+        setUsername: (state, username) => {
+            state.username = username;
+            localStorage.setItem('username', username);
+        },
+        setName: (state, name) => {
+            state.name = name;
+            localStorage.setItem('name', name);
+        },
+    },
+})
 
-const themeConfig = reactive<GlobalState['themeConfig']>({
-    // 布局切换 ==>  纵向：vertical | 经典：classic | 横向：transverse | 分栏：columns
-    layout: 'vertical',
-    // 默认 primary 主题颜色
-    primary: DEFAULT_PRIMARY,
-    // 深色模式
-    isDark: false,
-    // 灰色模式
-    isGrey: false,
-    // 色弱模式
-    isWeak: false,
-    // 当前页面是否全屏
-    maximize: false,
-  })
 
-export default useCounterStore;

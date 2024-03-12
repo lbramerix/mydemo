@@ -8,12 +8,15 @@ import Exam from '@/views/yuejuan/exam';
 import Answersheet from '@/views/yuejuan/answersheet';
 // 教师阅卷
 import Teacher from '@/views/yuejuan/teacher';
-// 学业分析 
+// 学业分析
 import Analysis from '@/views/yuejuan/analysis';
 // 题库组卷
 import Questionbank from '@/views/yuejuan/questionbank';
 // 批阅
 import Mark from '@/views/marking/mark';
+//个人中心
+import Personal from '@/views/personal/personal';
+
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -82,6 +85,16 @@ const router = createRouter({
             path: '/marking/mark',
             name: '批阅',
             component: Mark,
+            hidden: true,
+            props: true,
+            meta: {
+                requireAuth: false
+            }
+        },
+        {
+            path: '/personal',
+            name: '个人中心',
+            component: Personal,
             hidden: true,
             props: true,
             meta: {

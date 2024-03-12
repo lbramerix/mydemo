@@ -18,10 +18,10 @@ const useUserStore = defineStore('user', {
         // 异步 action
         async login(userData) {
             console.log("21");
-            const result = await axios.post('/api/user/login', userData)
+            const result = await axios.get('http://127.0.0.1:4523/m1/4119870-0-default/api/user/login', userData)
             console.log(result);
             const { data, code } = result.data
-            if (code === 0) {
+            if (code === 200) {
                 // action 中修改状态
                 this.username = data.username
                 this.token = data.token

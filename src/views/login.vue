@@ -32,7 +32,7 @@
 					</el-form>
 					<div class="dialog-footer" style="text-align: center;">
 						<el-button @click="dialogFormVisible = false;">取 消</el-button>
-						<el-button type="primary" @click="onLogin" style="margin-left: 12px;">登 录</el-button>
+						<el-button type="primary" @click="login" style="margin-left: 12px;">登 录</el-button>
 					</div>
 				</el-dialog>
 			</div>
@@ -80,9 +80,19 @@
 
 <script setup>
 import { computed, ref, watch, reactive } from 'vue';
-let logining = ref(false);
+// import useUserStore from '../store/index.js';
+import axios from 'axios';
+import store from '../store/index.js';
+import { useRouter } from 'vue-router';
+const route = useRouter()
+
+// import axios from 'axios' // 引入axios
+// axios.get('/mock/news').then(res => { // url即在mock.js中定义的
+//   console.log(res.data) // 打印一下响应数据
+// })
+// let logining = ref(false);
 let dialogFormVisible = ref(false);
-import useUserStore from "../store/user"
+
 
 const userData = reactive({
 	username: '',
@@ -90,21 +100,44 @@ const userData = reactive({
 })
 
 // 实例化 store
-const userStore = useUserStore()
+// const userStore = useUserStore()
 
-const onLogin = async () => {
-	// 使用 actions，当作函数一样直接调用
-	// login action 定义为了 async 函数，所以它返回一个 Promise
-	await userStore.login(userData)
-	userData.username = ''
-	userData.password = ''
-}
-const onLogout = () => {
-  userStore.logout()
-}
+// const onLogin = async () => {
+//   // 使用 actions，当作函数一样直接调用
+//   // login action 定义为了 async 函数，所以它返回一个 Promise
+//   route.push({ path: '/index'});
+//   // await userStore.login(userData)
+//   // userData.username = ''
+//   // userData.password = ''
+// }
+const login = async () => {
+  try {
+    const response = await axios.post('/user', {
+      username: userData.username,
+      password: userData.password
+    });
+    // Handle the response data
+    console.log(response.data);
+    const code = response.data.meta.status;
+    if (code == '200') {
+      store.commit('setUsername', userData.username);
+      store.commit('setName', response.data.user.name);
+      console.log(response.data.user.name);
+      console.log(store.state);
+
+      route.push({ path: '/index'});
+    }
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+};
+
+// const onLogout = () => {
+//   userStore.logout()
+// }
 function submitForm(form) {
 	// 测试通道，不为空直接登录
-	if (form.username && form.password) {  }
+	if (form.username && form.password) { route.push({ path: '/index'});}
 	else { alert('请输入账号和密码') }
 }
 </script>

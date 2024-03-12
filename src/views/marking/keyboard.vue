@@ -10,8 +10,7 @@
                 :value="score.name"></el-input>
 
             <div class="numberContainer ">
-                <el-button v-for="num in displayedNumbers" :key="num" class="box" :data-id="num">{{
-                num }}</el-button>
+                <el-button v-for="num in displayedNumbers" :key="num" class="box" :data-id="num">{{ num }}</el-button>
             </div>
             <el-button class="box k0" data-id='0'>0</el-button>
             <el-button class="box kb" style="margin-left: 0px;" data-id='.'>.</el-button>
