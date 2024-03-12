@@ -4,28 +4,41 @@ import Vuex from 'vuex'
 
 export default new Vuex.Store({
     state: {
-        id: localStorage.getItem('id') , // 从localStorage获取ID
-        username: localStorage.getItem('username') , // 从localStorage获取用户名
-        name: localStorage.getItem('name') , // 从localStorage获取真实姓名
+        id: sessionStorage.getItem('id') , 
+        username: sessionStorage.getItem('username') ,
+        name: sessionStorage.getItem('name') ,
+        age: sessionStorage.getItem('age') , 
+        job: sessionStorage.getItem('job') , 
+
 
     },
     getters: {
         id: (state) => state.id,
         username: (state) => state.username,
         name: (state) => state.name,
+        age: (state) => state.age,
+        job: (state) => state.job,
     },
     mutations: {
         setId: (state, id) => {
             state.id = id;
-            localStorage.setItem('id', id);
+            sessionStorage.setItem('id', id);
         },
         setUsername: (state, username) => {
             state.username = username;
-            localStorage.setItem('username', username);
+            sessionStorage.setItem('username', username);
         },
         setName: (state, name) => {
             state.name = name;
-            localStorage.setItem('name', name);
+            sessionStorage.setItem('name', name);
+        },
+        setAge: (state, age) => {
+            state.age = age;
+            sessionStorage.setItem('age', age);
+        },
+        setJob: (state, job) => {
+            state.job = job;
+            sessionStorage.setItem('job', job);
         },
     },
 })

@@ -80,17 +80,11 @@
 
 <script setup>
 import { computed, ref, watch, reactive } from 'vue';
-// import useUserStore from '../store/index.js';
 import axios from 'axios';
 import store from '../store/index.js';
 import { useRouter } from 'vue-router';
 const route = useRouter()
 
-// import axios from 'axios' // 引入axios
-// axios.get('/mock/news').then(res => { // url即在mock.js中定义的
-//   console.log(res.data) // 打印一下响应数据
-// })
-// let logining = ref(false);
 let dialogFormVisible = ref(false);
 
 
@@ -99,17 +93,6 @@ const userData = reactive({
 	password: '',
 })
 
-// 实例化 store
-// const userStore = useUserStore()
-
-// const onLogin = async () => {
-//   // 使用 actions，当作函数一样直接调用
-//   // login action 定义为了 async 函数，所以它返回一个 Promise
-//   route.push({ path: '/index'});
-//   // await userStore.login(userData)
-//   // userData.username = ''
-//   // userData.password = ''
-// }
 const login = async () => {
   try {
     const response = await axios.post('/user', {
@@ -122,8 +105,8 @@ const login = async () => {
     if (code == '200') {
       store.commit('setUsername', userData.username);
       store.commit('setName', response.data.user.name);
-      console.log(response.data.user.name);
-      console.log(store.state);
+	  store.commit('setAge', response.data.user.age);
+      store.commit('setJob', response.data.user.job);
 
       route.push({ path: '/index'});
     }
@@ -132,14 +115,6 @@ const login = async () => {
   }
 };
 
-// const onLogout = () => {
-//   userStore.logout()
-// }
-function submitForm(form) {
-	// 测试通道，不为空直接登录
-	if (form.username && form.password) { route.push({ path: '/index'});}
-	else { alert('请输入账号和密码') }
-}
 </script>
 
 <style scoped>

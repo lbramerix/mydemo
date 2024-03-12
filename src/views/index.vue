@@ -9,14 +9,9 @@
     </div>
    </template>
    
-   <script>
+   <script setup>
    import Navbar from '@/components/Navbar'
-   export default {
-     name: 'app',
-     components: {
-       Navbar,
-     }
-   }
+
    </script>
    
    <style>
