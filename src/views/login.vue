@@ -84,10 +84,7 @@ import axios from 'axios';
 import store from '../store/index.js';
 import { useRouter } from 'vue-router';
 const route = useRouter()
-
 let dialogFormVisible = ref(false);
-
-
 const userData = reactive({
 	username: '',
 	password: '',

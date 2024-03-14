@@ -3,13 +3,13 @@
         :header-cell-style="{ background: '#eef1f6', color: '#000000', 'text-align': 'center' }" :header-border="true" border>
         <el-table-column prop="name" label="题目名称" width="140" align="left"></el-table-column>
         <el-table-column prop="score" label="分值" width="90" align="center"></el-table-column>
-        <el-table-column label="整体：已阅量/阅读量" align="center">
+        <el-table-column label="整体：已阅量/需阅量" align="center">
             <template v-slot="{ row }">
                 <span><span :style="{ color: getTextColor(row.all1, row.all2) }">{{ row.all1 }}</span> / {{ row.all2
                 }}</span>
             </template>
         </el-table-column>
-        <el-table-column label="个人：已阅量/阅读量" align="center">
+        <el-table-column label="个人：已阅量/需阅量" align="center">
             <template v-slot="{ row }">
                 <span><span :style="{ color: getTextColor(row.per1, row.per2) }">{{ row.per1 }}</span> / {{ row.per2
                 }}</span>
@@ -63,9 +63,7 @@ export default {
             return 'black'; // 默认颜色 
         },
         toMark(row){
-            // const name = decodeURIComponent(row.name); // 解码参数值
             this.$router.push({ path: '/marking/mark' ,query: { name: row.name } });
-            console.log('Name1:', row.name);
         }
     },
     computed: {

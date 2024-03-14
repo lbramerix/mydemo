@@ -1,6 +1,16 @@
 <template>
   <div style="background-color: #f2f3f5;height: 100%; min-height: 100vh;margin: 0;padding: 0;">
     <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse-item title="Consistency" name="1" v-for="(info, index) in schools" :key="index">
+        <div>
+          {{info.tag}}
+        </div>
+      </el-collapse-item>
+    </el-collapse>
+
+
+
+    <!-- <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item style="padding-top: 30px;margin-left: 300px;margin-right: 300px;" name="1">
         <template v-slot:title>
           <div style="margin-left: 30px;">
@@ -21,7 +31,7 @@
                 </div>
               </div>
             </template>
-            <my-table :table-data="shangchinese"></my-table>
+            <MyTable :table-data="shangchinese"></MyTable>
           </el-collapse-item>
           <el-collapse-item name="2">
             <template v-slot:title>
@@ -36,7 +46,7 @@
                 </div>
               </div>
             </template>
-            <my-table :table-data="shangenglish"></my-table>
+            <MyTable :table-data="shangenglish"></MyTable>
           </el-collapse-item>
           <el-collapse-item name="3">
             <template v-slot:title>
@@ -51,7 +61,7 @@
                 </div>
               </div>
             </template>
-            <my-table :table-data="shangwen"></my-table>
+            <MyTable :table-data="shangwen"></MyTable>
           </el-collapse-item>
         </el-collapse>
       </el-collapse-item>
@@ -62,7 +72,8 @@
         <template v-slot:title>
           <div style="margin-left: 30px;">
             <div class="label2">学校</div>
-            <span style="display: inline-block;margin-left: 10px;font-size: 16px;font-weight: 700;">长春市普通高中2023级高一质量监测</span>
+            <span
+              style="display: inline-block;margin-left: 10px;font-size: 16px;font-weight: 700;">长春市普通高中2023级高一质量监测</span>
           </div>
         </template>
         <el-collapse v-model="activeNames4" style="margin-left: 30px;margin-right: 30px;">
@@ -78,116 +89,71 @@
                 </div>
               </div>
             </template>
-            <my-table :table-data="schoolchinese"></my-table>
+            <MyTable :table-data="schoolchinese"></MyTable>
           </el-collapse-item>
         </el-collapse>
       </el-collapse-item>
-    </el-collapse>
+    </el-collapse> -->
+    <div v-if="schools.length > 0">数据已加载</div>
+    <div v-else>暂无数据</div>
   </div>
 </template>
 
-<script>
+<script setup>
 import MyTable from '@/views/table/subject.vue';
-import '@/assets/css/styles.css'; 
-export default {
-  components: {
-    'my-table': MyTable
-  },
-  data() {
-    return {
-      shangchinese: [{
-        name: "主观题 第6题",
-        score: 6,
-        all1: 900,
-        all2: 1000,
-        per1: 60,
-        per2: 210,
-        returned: 2,
-      }, {
-        name: "主观题 第8题",
-        score: 6,
-        all1: 1000,
-        all2: 1000,
-        per1: 60,
-        per2: 60,
-        returned: 0,
-      }, {
-        name: "主观题 第8题",
-        score: 6,
-        all1: 400,
-        all2: 700,
-        per1: 0,
-        per2: 70,
-        returned: 0,
-      }],
-      shangenglish: [{
-        name: "主观题 短文改错",
-        score: 10,
-        all1: 800,
-        all2: 1000,
-        per1: 60,
-        per2: 100,
-        returned: 0,
-      }],
-      shangwen: [{
-        name: "选做题1 43",
-        score: 10,
-        all1: 500,
-        all2: 500,
-        per1: 70,
-        per2: 70,
-        returned: 0,
-      },{
-        name: "选做题1 44",
-        score: 10,
-        all1: 400,
-        all2: 500,
-        per1: 60,
-        per2: 70,
-        returned: 0,
-      }],
-      schoolchinese:[{
-        name: "主观题13-16",
-        score: 10,
-        all1: 400,
-        all2: 500,
-        per1: 60,
-        per2: 70,
-        returned: 0,
-      }],
-      activeNames: ['1'],
-      activeNames2: ['1', '2','3'],
-      activeNames3: ['1'],
-      activeNames4: ['1'],
-      num1: 10,
-      num2: 20,
-      num3: 900,
-      num4: 1000
-    };
-  },
-  methods: {
-    handleChange(val) {
-      console.log(val);
-    },
-    getTextColor(num1, num2) {
-      if (num1 < num2) {
-        return 'red';
-      }
-      return 'black'; // 默认颜色 
-    }
-  },
-  computed: {
-    isNum1Smaller() {
-      return this.num1 < this.num2;
-    }
+import '@/assets/css/styles.css';
+import { computed, ref, watch, reactive } from 'vue';
+import axios from 'axios';
+let schools = reactive([]);
+let subjects = [];
+let tags = [];
+const displayedNumbers = ref([9, 8, 7, 6, 5, 4, 3, 2, 1]);
+
+
+axios.post('/school')
+  .then(response => {
+    schools = response.data.data.map(item => item);
+    console.log(schools)
+    const subjectPromises = schools.map(school => axios.post('/subject', { school: school.school }));
+    const tagPromise = axios.get('/tag');
+    let subjectIndex = 0;
+    Promise.all([...subjectPromises, tagPromise])
+      .then(responses => {
+        /* 获取科目信息的响应*/
+        const subjectResponses = responses.slice(0, -1);
+        /* 获取标签信息的响应*/
+        const tagResponse = responses[responses.length - 1];
+        tags = tagResponse.data.data.taginfo;
+        subjectResponses.forEach(response => {
+          subjects[subjectIndex] = response.data.data;
+          subjectIndex++;
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+
+function handleChange(val) {
+  console.log(val);
+}
+function getTextColor(num1, num2) {
+  if (num1 < num2) {
+    return 'red';
   }
+  return 'black'; // 默认颜色 
+}
+function isNum1Smaller() {
+  return this.num1 < this.num2;
 }
 </script>
 
 <style scoped>
-
 .el-collapse {
-    border: none;
+  border: none;
 }
-
 </style>
