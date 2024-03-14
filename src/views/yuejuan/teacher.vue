@@ -102,15 +102,16 @@
 <script setup>
 import MyTable from '@/views/table/subject.vue';
 import '@/assets/css/styles.css';
-import { computed, ref, watch, reactive } from 'vue';
+import { computed, ref, watch, reactive, beforeMounted  } from 'vue';
+
 import axios from 'axios';
 let schools = reactive([]);
 let subjects = [];
 let tags = [];
 const displayedNumbers = ref([9, 8, 7, 6, 5, 4, 3, 2, 1]);
 
-
-axios.post('/school')
+beforeMounted(() =>{
+  axios.post('/school')
   .then(response => {
     schools = response.data.data.map(item => item);
     console.log(schools)
@@ -135,7 +136,8 @@ axios.post('/school')
   })
   .catch(error => {
     console.error(error);
-  });
+  });})
+
 
 
 function handleChange(val) {
