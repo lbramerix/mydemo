@@ -88,30 +88,8 @@
                     <Mykeyboard></Mykeyboard>
                 </div>
             </Draggable>
-
-            <div ref="el" p="x-4 y-2" border="~ gray-800/30 rounded" shadow="~ hover:lg"
-                class="fixed bg-$vp-c-bg select-none cursor-move z-31" style="touch-action:none;" :style="style">
-                👋 Drag me!
-                <div class="text-sm opacity-50">
-                    I am at {{ Math.round(x) }}, {{ Math.round(y) }}
-                </div>
-            </div>
-
         </div>
-        <div class="z-9999 bottom-0 left-0 absolute;" style="background-color: #f2f3f5;">
-            <el-affix position="bottom" :offset="0">
-                <el-button v-if="!isEditOpen" @click="toggleSidebar">编辑栏</el-button>
-                <div :class="{ 'sidebar-open': isOpen }" class="sidebar">
 
-                    <el-card style="width: 480px" shadow="always">
-                        <span>T</span>
-                        <el-divider direction="vertical" />
-                        <span>清空</span>
-                        <el-button @click="closeSidebar">收起</el-button>
-                    </el-card>
-                </div>
-            </el-affix>
-        </div>
     </div>
 </template>
 

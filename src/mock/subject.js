@@ -12,7 +12,7 @@ const subjectList = {
             per2: 210,
             returned: 2,
             school: '上林县中学&城关中学联考',
-            subjct: '语文',
+            subject: '语文',
         }, {
             name: "主观题 第8题",
             score: 6,
@@ -22,7 +22,7 @@ const subjectList = {
             per2: 60,
             returned: 0,
             school: '上林县中学&城关中学联考',
-            subjct: '语文',
+            subject: '语文',
         }, {
             name: "主观题 第8题",
             score: 6,
@@ -32,7 +32,7 @@ const subjectList = {
             per2: 70,
             returned: 0,
             school: '上林县中学&城关中学联考',
-            subjct: '语文',
+            subject: '语文',
         }, {
             name: "主观题 短文改错",
             score: 10,
@@ -42,7 +42,7 @@ const subjectList = {
             per2: 100,
             returned: 0,
             school: '上林县中学&城关中学联考',
-            subjct: '英语',
+            subject: '英语',
         }, {
             name: "选做题1 43",
             score: 10,
@@ -52,7 +52,7 @@ const subjectList = {
             per2: 70,
             returned: 0,
             school: '上林县中学&城关中学联考',
-            subjct: '文综合'
+            subject: '文综合'
         }, {
             name: "选做题1 44",
             score: 10,
@@ -62,7 +62,7 @@ const subjectList = {
             per2: 70,
             returned: 0,
             school: '上林县中学&城关中学联考',
-            subjct: '文综合'
+            subject: '文综合'
         }, {
             name: "主观题13-16",
             score: 10,
@@ -72,7 +72,7 @@ const subjectList = {
             per2: 70,
             returned: 0,
             school: '长春市普通高中2023级高一质量监测',
-            subjct: '语文'
+            subject: '语文'
         }],
         meta: {
             status: 200,
@@ -155,12 +155,9 @@ Mock.mock('/school', 'post', req => {
 })
 
 Mock.mock('/subject', 'post', req => {
-    const { school } = JSON.parse(req.body);
     let filteredSubjects = [];
     for (let i = 0; i < subjectList.data.subjectinfo.length; i++) {
-        if (school === subjectList.data.subjectinfo[i].school) {
-            filteredSubjects.push(subjectList.data.subjectinfo[i]);
-        }
+        filteredSubjects.push(subjectList.data.subjectinfo[i]);
     }
     if (filteredSubjects.length > 0) {
         return {
