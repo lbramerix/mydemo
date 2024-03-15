@@ -1,18 +1,19 @@
 <template>
     <el-table :data="tableData" style="width: 100%"
-        :header-cell-style="{ background: '#eef1f6', color: '#000000', 'text-align': 'center' }" :header-border="true" border>
+        :header-cell-style="{ background: '#eef1f6', color: '#000000', 'text-align': 'center' }" :header-border="true"
+        border>
         <el-table-column prop="name" label="题目名称" width="140" align="left"></el-table-column>
         <el-table-column prop="score" label="分值" width="90" align="center"></el-table-column>
         <el-table-column label="整体：已阅量/需阅量" align="center">
             <template v-slot="{ row }">
                 <span><span :style="{ color: getTextColor(row.all1, row.all2) }">{{ row.all1 }}</span> / {{ row.all2
-                }}</span>
+                    }}</span>
             </template>
         </el-table-column>
         <el-table-column label="个人：已阅量/需阅量" align="center">
             <template v-slot="{ row }">
                 <span><span :style="{ color: getTextColor(row.per1, row.per2) }">{{ row.per1 }}</span> / {{ row.per2
-                }}</span>
+                    }}</span>
             </template>
         </el-table-column>
         <el-table-column label="抽查被打回(待阅)" align="center">
@@ -44,34 +45,26 @@
     </el-table>
 </template>
 
-<script>
-export default {
-    props: {
-        tableData: {
-            type: Array,
-            required: true
-        }
-    },
-    methods: {
-        handleChange(val) {
-            console.log(val);
-        },
-        getTextColor(num1, num2) {
-            if (num1 < num2) {
-                return 'red';
-            }
-            return 'black'; // 默认颜色 
-        },
-        toMark(row){
-            this.$router.push({ path: '/marking/mark' ,query: { name: row.name } });
-        }
-    },
-    computed: {
-        isNum1Smaller() {
-            return this.num1 < this.num2;
-        }
+<script setup>
+import { computed, ref, watch, reactive, onBeforeMount } from 'vue';
+let tableData = ref([]);
+function handleChange(val) {
+    console.log(val);
+}
+function getTextColor(num1, num2) {
+    if (num1 < num2) {
+        return 'red';
     }
-};
+    return 'black'; // 默认颜色 
+}
+function toMark(row) {
+    this.$router.push({ path: '/marking/mark', query: { name: row.name } });
+}
+function isNum1Smaller() {
+    return this.num1 < this.num2;
+}
+
 </script>
 
-<style scoped>/* 样式 */</style>
+<style scoped>
+</style>

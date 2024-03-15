@@ -80,7 +80,7 @@ export default {
 
     },
     handleCommand(command) {
-      console.log('Selected command:', command); // 添加这行调试输出语句
+      console.log('Selected command:', command);
       if (command === '1') {
         this.selectedText = '长春市第一高级中学';
       } else if (command === '2') {

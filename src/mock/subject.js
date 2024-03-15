@@ -132,6 +132,7 @@ const tagList = {
 };
 
 Mock.mock('/school', 'post', req => {
+    //获取学校信息列表
     let filteredSchools = [];
     for (let i = 0; i < schoolList.data.schoolinfo.length; i++) {
         filteredSchools.push(schoolList.data.schoolinfo[i]);
@@ -155,6 +156,7 @@ Mock.mock('/school', 'post', req => {
 })
 
 Mock.mock('/subject', 'post', req => {
+    //获取学科信息列表
     let filteredSubjects = [];
     for (let i = 0; i < subjectList.data.subjectinfo.length; i++) {
         filteredSubjects.push(subjectList.data.subjectinfo[i]);

@@ -1,6 +1,5 @@
 <template>
   <div style="background-color: #f2f3f5;height: 100%; min-height: 100vh;margin: 0;padding: 0;">
-
     <el-collapse @change="handleChange" v-model="expandedCollapse">
       <el-collapse-item style="padding-top: 30px;margin-left: 300px;margin-right: 300px;" v-for="(school,index) in schools" :key="index" :name="getCollapseItemName(school)">
         <template v-slot:title>
@@ -15,8 +14,7 @@
               <div>
                 <span
                     style="display: inline-block;margin-left: 10px;font-size: 15px;font-weight: 700;display: inline-block;">{{ tag.subject }}</span>
-                <div :class="getTagClass(label)" style="margin-left: 10px;" v-for="label in tag.tag.split(' ')">{{ label }}</div>
-
+                <div :class="getTagClass(label)" style="margin-left: 10px;" v-for="label in tag.tag.split(' ')" :key="label">{{ label }}</div>
                 <div style="margin-left: 10px;color: #a8a8a8;display: inline-block;">有效卡/考生数：</div>
                 <div style="display: inline-block;">
                   <span :style="{ color: isNum1Smaller ? 'red' : 'black' }">{{ tag.participantsNumber }}</span>/<span>{{ tag.allNumber }}</span>人
